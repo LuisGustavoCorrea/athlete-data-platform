@@ -64,7 +64,7 @@
 				"type": "Delete",
 				"dependsOn": [
 					{
-						"activity": "MoveFiles",
+						"activity": "Wait 5 sec",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -101,6 +101,22 @@
 						"recursive": true,
 						"enablePartitionDiscovery": false
 					}
+				}
+			},
+			{
+				"name": "Wait 5 sec",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "MoveFiles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 5
 				}
 			}
 		],
