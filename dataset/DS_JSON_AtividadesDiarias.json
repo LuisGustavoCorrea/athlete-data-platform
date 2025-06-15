@@ -1,0 +1,27 @@
+{
+	"name": "DS_JSON_AtividadesDiarias",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_Datalake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"folderPath": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": {
+					"value": "@concat(\n  'raw/strava/activities/',\n  dataset().folderPath\n)\n",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

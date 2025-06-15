@@ -1,0 +1,19 @@
+{
+	"name": "DS_Athlete_Rest",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_API",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "athlete",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

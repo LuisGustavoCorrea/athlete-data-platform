@@ -1,0 +1,9 @@
+{
+	"name": "adf-strava-api",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "014bc69f-a4a8-446a-9224-98f77e6d9097",
+		"tenantId": "778e8fbe-e92b-4129-807e-71bbce5776dd"
+	}
+}

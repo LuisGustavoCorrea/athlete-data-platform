@@ -1,0 +1,11 @@
+{
+	"name": "LS_Strava_Datalake",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://adlsathlete.dfs.core.windows.net/"
+		}
+	}
+}

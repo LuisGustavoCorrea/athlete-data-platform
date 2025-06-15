@@ -1,0 +1,16 @@
+{
+	"name": "DS_Json_Strava",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_API",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "v3/athlete/activities/"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

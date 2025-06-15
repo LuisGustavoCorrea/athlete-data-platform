@@ -1,0 +1,144 @@
+{
+	"name": "ppl_strava_sub_activities_ingest",
+	"properties": {
+		"activities": [
+			{
+				"name": "DF_list_id",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_Lookup_ID_Activity",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "None",
+					"cacheSinks": {
+						"firstRowOnly": true
+					}
+				}
+			},
+			{
+				"name": "Set list id_activity",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "DF_list_id",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "list_id_activity",
+					"value": {
+						"value": "@string(activity('DF_list_id').output.runStatus.output.sink1.value)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Loop by id_activity",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Set list id_activity",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@json(variables('list_id_activity'))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "API_TO_DATALAKE",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"additionalHeaders": {
+										"Authorization": {
+											"value": "@concat('Bearer ', pipeline().parameters.p_access_token)",
+											"type": "Expression"
+										}
+									},
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_REST_Strava_subactivities",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_JSON_SubActivity",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"p_access_token": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"list_id_activity": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-06-11T15:45:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

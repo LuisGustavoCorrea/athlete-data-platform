@@ -1,0 +1,26 @@
+{
+	"name": "DS_Json_DL_Strava_Athlete",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_Datalake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat('athlete_', formatDateTime(utcNow(), 'HHmmss'), '_', guid(), '.json')",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@concat('raw/strava/athlete/', formatDateTime(utcNow(), 'yyyy-MM-dd'))\n",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

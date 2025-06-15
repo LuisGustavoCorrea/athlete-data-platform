@@ -1,0 +1,301 @@
+{
+	"name": "ppl_strava_activities_ingest",
+	"properties": {
+		"activities": [
+			{
+				"name": "UT_GetAllPages",
+				"type": "Until",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals('false', variables('continueLoop'))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "API_TO_DATALAKE",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Set_FIle_Name",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"additionalHeaders": {
+										"Authorization": {
+											"value": "@concat('Bearer ', pipeline().parameters.p_access_token)",
+											"type": "Expression"
+										}
+									},
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Rest_AthleteActivities",
+									"type": "DatasetReference",
+									"parameters": {
+										"pageNumber": "@string(variables('currentPage'))",
+										"perPage": {
+											"value": "@string(variables('perPage'))",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_Json_AthleteActivities",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@variables('setFileName')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Set_PageCount",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "API_TO_DATALAKE",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "pageCount",
+								"value": {
+									"value": "@activity('API_TO_DATALAKE').output.rowsCopied",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set_FIle_Name",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "set DebugcontinueLoop",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "setFileName",
+								"value": {
+									"value": "@concat('activity_', formatDateTime(utcNow(), 'HHmmss'), '_', guid(), '.json')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "set DebugcontinueLoop",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "DebugcontinueLoop",
+								"value": {
+									"value": "@variables('continueLoop')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "If_LastPage",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Set_PageCount",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@less(variables('pageCount'), 30)\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "temp var",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "temp",
+											"value": {
+												"value": "@add(variables('currentPage'), 1)\n",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Increment_CurrentPage",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "temp var",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "currentPage",
+											"value": {
+												"value": "@variables('temp')",
+												"type": "Expression"
+											}
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Set_ContinueFalse",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "temp false",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "continueLoop",
+											"value": {
+												"value": "@variables('tempFalse')",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "temp false",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "tempFalse",
+											"value": {
+												"value": "@string('false')\n",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"p_access_token": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"currentPage": {
+				"type": "Integer",
+				"defaultValue": 1
+			},
+			"continueLoop": {
+				"type": "String",
+				"defaultValue": "true"
+			},
+			"pageCount": {
+				"type": "Integer"
+			},
+			"temp": {
+				"type": "Integer"
+			},
+			"tempFalse": {
+				"type": "String"
+			},
+			"setFileName": {
+				"type": "String"
+			},
+			"DebugcontinueLoop": {
+				"type": "String"
+			},
+			"perPage": {
+				"type": "String",
+				"defaultValue": "1"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-06-11T20:20:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,26 @@
+{
+	"name": "destination_files",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_Datalake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"destination": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": {
+					"value": "@dataset().destination",
+					"type": "Expression"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

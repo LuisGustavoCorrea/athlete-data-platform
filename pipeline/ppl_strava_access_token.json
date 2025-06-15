@@ -1,0 +1,85 @@
+{
+	"name": "ppl_strava_access_token",
+	"properties": {
+		"activities": [
+			{
+				"name": "Refresh_Token",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"url": "https://www.strava.com/oauth/token",
+					"body": {
+						"value": "@concat(\n  '{',\n    '\"client_id\":\"', pipeline().parameters.param_client_id, '\",',\n    '\"client_secret\":\"', pipeline().parameters.param_client_secret, '\",',\n    '\"grant_type\":\"', pipeline().parameters.param_grant_type, '\",',\n    '\"refresh_token\":\"', pipeline().parameters.param_refresh_token, '\"',\n  '}'\n)\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set_Return_ppl",
+				"type": "SetVariable",
+				"state": "Active",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Refresh_Token",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pipelineReturnValue",
+					"value": [
+						{
+							"key": "access_token_prv",
+							"value": {
+								"type": "Expression",
+								"content": "@activity('Refresh_Token').output\n"
+							}
+						}
+					],
+					"setSystemVariable": true
+				}
+			}
+		],
+		"parameters": {
+			"param_client_id": {
+				"type": "string"
+			},
+			"param_client_secret": {
+				"type": "string"
+			},
+			"param_grant_type": {
+				"type": "string"
+			},
+			"param_refresh_token": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"access_token": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-06-13T09:57:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

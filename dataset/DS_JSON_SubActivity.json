@@ -1,0 +1,26 @@
+{
+	"name": "DS_JSON_SubActivity",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_Datalake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat('sub_activity', formatDateTime(utcNow(), 'HHmmss'), '_', guid(), '.json')",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@concat('raw/strava/sub_activity/', formatDateTime(utcNow(), 'yyyy-MM-dd'))",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
