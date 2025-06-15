@@ -64,7 +64,7 @@
 				"type": "Delete",
 				"dependsOn": [
 					{
-						"activity": "Wait 5 sec",
+						"activity": "Wait 4 sec",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -104,7 +104,7 @@
 				}
 			},
 			{
-				"name": "Wait 5 sec",
+				"name": "Wait 4 sec",
 				"type": "Wait",
 				"dependsOn": [
 					{
@@ -116,7 +116,7 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 5
+					"waitTimeInSeconds": 4
 				}
 			}
 		],
