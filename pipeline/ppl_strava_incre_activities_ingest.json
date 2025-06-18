@@ -97,7 +97,7 @@
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "API_TO_DATALAKE",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -265,14 +265,7 @@
 						{
 							"name": "Set variable1",
 							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "API_TO_DATALAKE",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"secureOutput": false,
 								"secureInput": false
