@@ -18,7 +18,7 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "Set_FIle_Name",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -97,7 +97,7 @@
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "API_TO_DATALAKE",
+									"activity": "Set variable1",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -267,7 +267,7 @@
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Set_FIle_Name",
+									"activity": "API_TO_DATALAKE",
 									"dependencyConditions": [
 										"Succeeded"
 									]
