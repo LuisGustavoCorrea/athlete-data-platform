@@ -291,7 +291,7 @@
 			},
 			"perPage": {
 				"type": "String",
-				"defaultValue": "1"
+				"defaultValue": "30"
 			}
 		},
 		"annotations": [],
