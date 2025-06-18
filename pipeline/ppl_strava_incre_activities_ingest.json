@@ -319,7 +319,7 @@
 			},
 			"last_activity_start_unix": {
 				"type": "Integer",
-				"defaultValue": 1746057600
+				"defaultValue": 1752581520
 			},
 			"debugLink": {
 				"type": "String"
