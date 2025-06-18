@@ -281,7 +281,7 @@
 							"typeProperties": {
 								"variableName": "debugLink",
 								"value": {
-									"value": "@concat(\n  'https://www.strava.com/api/v3/athlete/activities?',\n  'after=', string(variables('last_activity_start_unix')),\n  '&page=', string(variables('currentPage')),\n  '&per_page=', string(variables('perPage'))\n)\n",
+									"value": "@concat('https://www.strava.com/api/v3/athlete/activities?','after=', string(variables('last_activity_start_unix')),'&page=', string(variables('currentPage')),'&per_page=', string(variables('perPage'))\n)\n",
 									"type": "Expression"
 								}
 							}
