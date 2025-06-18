@@ -69,11 +69,11 @@
 											"type": "Expression"
 										},
 										"perPage": {
-											"value": "@(variables('perPage')",
+											"value": "@variables('perPage')",
 											"type": "Expression"
 										},
 										"last_activity_start_unix": {
-											"value": "@(variables('last_activity_start_unix')",
+											"value": "@variables('last_activity_start_unix')",
 											"type": "Expression"
 										}
 									}
