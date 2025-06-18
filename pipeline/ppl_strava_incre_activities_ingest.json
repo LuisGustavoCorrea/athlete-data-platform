@@ -263,7 +263,8 @@
 		],
 		"parameters": {
 			"p_access_token": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "l"
 			}
 		},
 		"variables": {
