@@ -64,10 +64,16 @@
 									"referenceName": "DS_Rest_Incre_AthleteActivities",
 									"type": "DatasetReference",
 									"parameters": {
-										"pageNumber": "@string(variables('currentPage'))",
-										"perPage": "@string(variables('perPage'))",
+										"pageNumber": {
+											"value": "@variables('currentPage')",
+											"type": "Expression"
+										},
+										"perPage": {
+											"value": "@(variables('perPage')",
+											"type": "Expression"
+										},
 										"last_activity_start_unix": {
-											"value": "@int(variables('last_activity_start_unix '))",
+											"value": "@(variables('last_activity_start_unix ')",
 											"type": "Expression"
 										}
 									}
