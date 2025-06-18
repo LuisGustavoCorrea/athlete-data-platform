@@ -67,7 +67,7 @@
 										"pageNumber": "@string(variables('currentPage'))",
 										"perPage": "@string(variables('perPage'))",
 										"last_activity_start_unix": {
-											"value": "@string(variables('last_activity_start_unix '))",
+											"value": "@variables('last_activity_start_unix ')",
 											"type": "Expression"
 										}
 									}
