@@ -17,7 +17,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "athlete/activities?page=@{dataset().pageNumber}&per_page=30",
+				"value": "athlete/activities?page=@{dataset().pageNumber}&per_page=dataset().perPage",
 				"type": "Expression"
 			}
 		},
