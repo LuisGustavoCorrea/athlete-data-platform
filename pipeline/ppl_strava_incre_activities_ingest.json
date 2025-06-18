@@ -301,7 +301,7 @@
 				"type": "Integer",
 				"defaultValue": 30
 			},
-			"last_activity_start_unix ": {
+			"last_activity_start_unix": {
 				"type": "Integer",
 				"defaultValue": 1749808030
 			}
