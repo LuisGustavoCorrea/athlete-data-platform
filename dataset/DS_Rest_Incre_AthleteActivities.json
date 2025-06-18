@@ -20,7 +20,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "athlete/activities?after=1750071453&page=1&per_page=30",
+				"value": "athlete/activities?after=@{dataset().last_activity_start_unix}&page=@{dataset().pageNumber}&per_page=@{dataset().perPage}",
 				"type": "Expression"
 			}
 		},
