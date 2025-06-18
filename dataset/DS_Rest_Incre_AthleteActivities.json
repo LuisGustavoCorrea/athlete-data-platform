@@ -1,0 +1,30 @@
+{
+	"name": "DS_Rest_Incre_AthleteActivities",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_API",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"pageNumber": {
+				"type": "string"
+			},
+			"perPage": {
+				"type": "string"
+			},
+			"last_activity_start_unix": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "athlete/activities?after=@{dataset().last_activity_start_unix}&page=@{dataset().pageNumber}&per_page=@{dataset().perPage}",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
