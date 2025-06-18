@@ -290,8 +290,8 @@
 				"type": "String"
 			},
 			"perPage": {
-				"type": "String",
-				"defaultValue": "1"
+				"type": "Integer",
+				"defaultValue": 30
 			}
 		},
 		"annotations": [],
