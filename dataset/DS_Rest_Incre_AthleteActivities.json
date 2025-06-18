@@ -20,7 +20,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "@concat(\n  'after=', string(dataset().last_activity_start_unix),\n  '&page=', string(dataset().pageNumber),\n  '&per_page=', string(dataset().perPage)\n)",
+				"value": "athlete/activities?after=@{dataset().last_activity_start_unix}&page=@{dataset().pageNumber}&per_page=@{dataset().perPage}",
 				"type": "Expression"
 			}
 		},
