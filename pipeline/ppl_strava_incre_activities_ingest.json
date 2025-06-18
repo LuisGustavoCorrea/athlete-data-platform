@@ -302,7 +302,7 @@
 			},
 			"last_activity_start_unix": {
 				"type": "Integer",
-				"defaultValue": 1749808030
+				"defaultValue": 1750071453
 			},
 			"url_debug": {
 				"type": "String"

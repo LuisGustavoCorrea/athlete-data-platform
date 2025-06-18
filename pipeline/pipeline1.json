@@ -3,26 +3,22 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Web1",
-				"type": "WebActivity",
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
 					"secureInput": false
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"method": "GET",
-					"headers": {
-						"Authorization": {
-							"value": "@concat('Bearer ', 'b3cfc104f205ba76850ebb4bf298dde9b3ecd043')",
-							"type": "Expression"
-						}
+					"pipeline": {
+						"referenceName": "ppl_strava_incre_activities_ingest",
+						"type": "PipelineReference"
 					},
-					"url": "https://www.strava.com/api/v3/athlete/activities?after=1749808030&page=1&per_page=30"
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_access_token": "b3cfc104f205ba76850ebb4bf298dde9b3ecd043"
+					}
 				}
 			}
 		],
