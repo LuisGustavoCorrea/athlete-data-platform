@@ -165,7 +165,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@less(variables('pageCount'), 30)\n",
+									"value": "@less(variables('pageCount'), variables('perPage'))",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
@@ -292,7 +292,7 @@
 			},
 			"perPage": {
 				"type": "Integer",
-				"defaultValue": 30
+				"defaultValue": 100
 			},
 			"last_activity_start_unix ": {
 				"type": "String",
