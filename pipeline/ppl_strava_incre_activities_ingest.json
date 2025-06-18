@@ -263,7 +263,7 @@
 							}
 						},
 						{
-							"name": "Set variable1",
+							"name": "Set debugLink",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
