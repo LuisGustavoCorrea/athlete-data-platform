@@ -264,7 +264,7 @@
 		"parameters": {
 			"p_access_token": {
 				"type": "string",
-				"defaultValue": "l"
+				"defaultValue": "48e11f8ee21f8e1e18fd7be414ce919930a7f5c4"
 			}
 		},
 		"variables": {
@@ -293,7 +293,7 @@
 			},
 			"perPage": {
 				"type": "Integer",
-				"defaultValue": 100
+				"defaultValue": 30
 			},
 			"last_activity_start_unix ": {
 				"type": "String",
