@@ -7,13 +7,13 @@
 		},
 		"parameters": {
 			"pageNumber": {
-				"type": "string"
+				"type": "int"
 			},
 			"perPage": {
-				"type": "string"
+				"type": "int"
 			},
 			"last_activity_start_unix": {
-				"type": "string"
+				"type": "int"
 			}
 		},
 		"annotations": [],
