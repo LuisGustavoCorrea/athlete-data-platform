@@ -18,7 +18,7 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Set_FIle_Name",
+									"activity": "Set variable1",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -261,6 +261,30 @@
 									}
 								]
 							}
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set_FIle_Name",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "debugLink",
+								"value": {
+									"value": "@concat(\n  'https://www.strava.com/api/v3/athlete/activities?',\n  'after=', string(variables('last_activity_start_unix')),\n  '&page=', string(variables('currentPage')),\n  '&per_page=', string(variables('perPage'))\n)\n",
+									"type": "Expression"
+								}
+							}
 						}
 					],
 					"timeout": "0.12:00:00"
@@ -303,6 +327,9 @@
 			"last_activity_start_unix": {
 				"type": "Integer",
 				"defaultValue": 1746057600
+			},
+			"debugLink": {
+				"type": "String"
 			}
 		},
 		"annotations": [],
