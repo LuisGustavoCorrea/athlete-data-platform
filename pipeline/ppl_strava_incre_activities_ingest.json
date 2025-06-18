@@ -302,7 +302,7 @@
 			},
 			"last_activity_start_unix": {
 				"type": "Integer",
-				"defaultValue": 1752556800
+				"defaultValue": 1752581520
 			}
 		},
 		"annotations": [],
