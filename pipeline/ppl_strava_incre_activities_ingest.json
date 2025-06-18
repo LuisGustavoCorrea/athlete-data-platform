@@ -67,7 +67,7 @@
 										"pageNumber": "@string(variables('currentPage'))",
 										"perPage": "@string(variables('perPage'))",
 										"last_activity_start_unix": {
-											"value": "@variables('last_activity_start_unix ')",
+											"value": "@int(variables('last_activity_start_unix '))",
 											"type": "Expression"
 										}
 									}
@@ -296,8 +296,8 @@
 				"defaultValue": 30
 			},
 			"last_activity_start_unix ": {
-				"type": "Integer",
-				"defaultValue": 1749808030
+				"type": "String",
+				"defaultValue": "1749808030"
 			}
 		},
 		"annotations": [],
