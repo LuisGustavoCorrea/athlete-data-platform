@@ -303,6 +303,9 @@
 			"last_activity_start_unix": {
 				"type": "Integer",
 				"defaultValue": 1749808030
+			},
+			"url_debug": {
+				"type": "String"
 			}
 		},
 		"annotations": [],
