@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Read table Control",
+				"name": "Read_table_control",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -34,7 +34,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Read table Control",
+						"activity": "Read_table_control",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -47,28 +47,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "list_fullcarga",
-					"value": "1"
-				}
-			},
-			{
-				"name": "Set variable2",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Read table Control",
-						"dependencyConditions": [
-							"Succeeded"
-						]
+					"value": {
+						"value": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].start_date_unix)\n",
+						"type": "Expression"
 					}
-				],
-				"policy": {
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "list_incremental",
-					"value": "1"
 				}
 			}
 		],
