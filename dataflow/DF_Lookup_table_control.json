@@ -12,47 +12,20 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [
-				{
-					"name": "sinkFullCarga"
-				},
-				{
-					"name": "sinkIncremental"
-				}
-			],
-			"transformations": [
-				{
-					"name": "split1"
-				}
-			],
+			"sinks": [],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          athlete_id as integer,",
-				"          start_date as string,",
+				"          start_date as date,",
 				"          ingestion_timestamp as string,",
-				"          full_carga as string,",
+				"          full_carga as boolean,",
 				"          start_date_unix as integer,",
 				"          ingestion_timestamp_unix as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 split(full_carga == 'S',",
-				"     disjoint: false) ~> split1@(fullCarga, Incremental)",
-				"split1@fullCarga sink(validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: true,",
-				"     saveOrder: 1) ~> sinkFullCarga",
-				"split1@Incremental sink(validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     store: 'cache',",
-				"     format: 'inline',",
-				"     output: true,",
-				"     saveOrder: 1) ~> sinkIncremental"
+				"     ignoreNoFilesFound: false) ~> source1"
 			]
 		}
 	}
