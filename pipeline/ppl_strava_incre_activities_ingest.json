@@ -287,6 +287,9 @@
 		"parameters": {
 			"p_access_token": {
 				"type": "string"
+			},
+			"p_start_date_unix": {
+				"type": "string"
 			}
 		},
 		"variables": {
