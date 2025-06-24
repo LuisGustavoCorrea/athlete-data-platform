@@ -34,9 +34,11 @@
 			{
 				"name": "ppl_strava_activities_ingest",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "ppl_strava_access_token",
+						"activity": "ppl_read_table_control",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -66,6 +68,12 @@
 				"dependsOn": [
 					{
 						"activity": "ppl_strava_activities_ingest",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Execute Pipeline1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -155,6 +163,59 @@
 				"userProperties": [],
 				"typeProperties": {
 					"waitTimeInSeconds": 5
+				}
+			},
+			{
+				"name": "ppl_read_table_control",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ppl_strava_access_token",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_read_table_control",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ppl_read_table_control",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_strava_incre_activities_ingest",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_access_token": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
+						"p_start_date_unix": {
+							"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.start_date_unix_prv",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
