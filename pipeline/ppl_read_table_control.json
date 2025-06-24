@@ -49,7 +49,7 @@
 					"variableName": "pipelineReturnValue",
 					"value": [
 						{
-							"key": "start_date_unix",
+							"key": "start_date_unix_prv",
 							"value": {
 								"type": "Expression",
 								"content": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].start_date_unix)"

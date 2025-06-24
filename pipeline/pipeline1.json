@@ -26,7 +26,7 @@
 					"parameters": {
 						"p_access_token": "8b30f66f7b52eba52803707ad9fcd6ab6c69ed4b",
 						"p_start_date_unix": {
-							"value": "@activity('Execute Pipeline2').output.pipelineReturnValue.start_date_unix.p_start_date_unix",
+							"value": "@activity('Execute Pipeline2').output.pipelineReturnValue.access_token_prv.access_token",
 							"type": "Expression"
 						}
 					}
@@ -51,7 +51,7 @@
 		],
 		"variables": {
 			"start_date_unix": {
-				"type": "String"
+				"type": "Integer"
 			}
 		},
 		"annotations": []
