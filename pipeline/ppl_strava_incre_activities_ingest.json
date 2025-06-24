@@ -320,7 +320,7 @@
 				"type": "string"
 			},
 			"p_start_date_unix": {
-				"type": "int"
+				"type": "string"
 			}
 		},
 		"variables": {
