@@ -143,7 +143,14 @@
 						{
 							"name": "set DebugcontinueLoop",
 							"type": "SetVariable",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Set debugLink",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"secureOutput": false,
 								"secureInput": false
@@ -265,7 +272,14 @@
 						{
 							"name": "Set debugLink",
 							"type": "SetVariable",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Set start_date_unix",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"secureOutput": false,
 								"secureInput": false
@@ -275,6 +289,23 @@
 								"variableName": "debugLink",
 								"value": {
 									"value": "@concat('https://www.strava.com/api/v3/athlete/activities?','after=', string(variables('last_activity_start_unix')),'&page=', string(variables('currentPage')),'&per_page=', string(variables('perPage'))\n)\n",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set start_date_unix",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "last_activity_start_unix",
+								"value": {
+									"value": "@pipeline().parameters.p_start_date_unix",
 									"type": "Expression"
 								}
 							}
@@ -289,7 +320,7 @@
 				"type": "string"
 			},
 			"p_start_date_unix": {
-				"type": "string"
+				"type": "int"
 			}
 		},
 		"variables": {
@@ -321,8 +352,7 @@
 				"defaultValue": 30
 			},
 			"last_activity_start_unix": {
-				"type": "Integer",
-				"defaultValue": 1750255899
+				"type": "Integer"
 			},
 			"debugLink": {
 				"type": "String"
