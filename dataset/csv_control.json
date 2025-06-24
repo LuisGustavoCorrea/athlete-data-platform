@@ -1,0 +1,49 @@
+{
+	"name": "csv_control",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_Datalake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "control_load_table.csv",
+				"folderPath": "strava",
+				"fileSystem": "silver"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "athlete_id",
+				"type": "String"
+			},
+			{
+				"name": "start_date",
+				"type": "String"
+			},
+			{
+				"name": "ingestion_timestamp",
+				"type": "String"
+			},
+			{
+				"name": "full_carga",
+				"type": "String"
+			},
+			{
+				"name": "start_date_unix",
+				"type": "String"
+			},
+			{
+				"name": "ingestion_timestamp_unix",
+				"type": "String"
+			}
+		]
+	}
+}

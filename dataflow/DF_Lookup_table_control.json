@@ -1,0 +1,59 @@
+{
+	"name": "DF_Lookup_table_control",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "csv_control",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sinkFullCarga"
+				},
+				{
+					"name": "sinkIncremental"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          athlete_id as integer,",
+				"          start_date as string,",
+				"          ingestion_timestamp as string,",
+				"          full_carga as string,",
+				"          start_date_unix as integer,",
+				"          ingestion_timestamp_unix as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(full_carga == 'S',",
+				"     disjoint: false) ~> split1@(fullCarga, Incremental)",
+				"split1@fullCarga sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: true,",
+				"     saveOrder: 1) ~> sinkFullCarga",
+				"split1@Incremental sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: true,",
+				"     saveOrder: 1) ~> sinkIncremental"
+			]
+		}
+	}
+}
