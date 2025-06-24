@@ -305,7 +305,7 @@
 							"typeProperties": {
 								"variableName": "last_activity_start_unix",
 								"value": {
-									"value": "@pipeline().parameters.p_start_date_unix",
+									"value": "@string(pipeline().parameters.p_start_date_unix)",
 									"type": "Expression"
 								}
 							}
@@ -352,7 +352,7 @@
 				"defaultValue": 30
 			},
 			"last_activity_start_unix": {
-				"type": "Integer"
+				"type": "String"
 			},
 			"debugLink": {
 				"type": "String"
