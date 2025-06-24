@@ -46,11 +46,16 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "list_fullcarga",
-					"value": {
-						"value": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].start_date_unix)\n",
-						"type": "Expression"
-					}
+					"variableName": "pipelineReturnValue",
+					"value": [
+						{
+							"key": "start_date_unix",
+							"value": {
+								"type": "String"
+							}
+						}
+					],
+					"setSystemVariable": true
 				}
 			}
 		],
