@@ -54,6 +54,13 @@
 								"type": "Expression",
 								"content": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].start_date_unix)"
 							}
+						},
+						{
+							"key": "full_carga_prv",
+							"value": {
+								"type": "Expression",
+								"content": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].full_carga)"
+							}
 						}
 					],
 					"setSystemVariable": true
