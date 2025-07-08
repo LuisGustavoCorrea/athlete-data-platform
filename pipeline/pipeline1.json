@@ -57,7 +57,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Execute Pipeline4",
+						"activity": "ppl_strava_access_token",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -79,7 +79,7 @@
 				}
 			},
 			{
-				"name": "Execute Pipeline4",
+				"name": "ppl_strava_access_token",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"policy": {
