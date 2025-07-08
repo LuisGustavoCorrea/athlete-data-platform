@@ -1,0 +1,19 @@
+{
+	"name": "ds_json_provisorio",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_Datalake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "strava/activities/processing_data",
+				"fileSystem": "raw"
+			}
+		},
+		"schema": {}
+	}
+}
