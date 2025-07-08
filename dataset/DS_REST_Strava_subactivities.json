@@ -9,7 +9,7 @@
 		"type": "RestResource",
 		"typeProperties": {
 			"relativeUrl": {
-				"value": "activities/@{item().id_activity}\n",
+				"value": "activities/@{item().id_activity}",
 				"type": "Expression"
 			}
 		},

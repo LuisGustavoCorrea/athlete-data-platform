@@ -3,56 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute Pipeline1",
-				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [
-					{
-						"activity": "Execute Pipeline2",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "ppl_strava_incre_activities_ingest",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"p_access_token": "8b30f66f7b52eba52803707ad9fcd6ab6c69ed4b",
-						"p_start_date_unix": {
-							"value": "@activity('Execute Pipeline2').output.pipelineReturnValue.start_date_unix_prv",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
-				"name": "Execute Pipeline2",
-				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "ppl_read_table_control",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
 				"name": "Execute Pipeline3",
 				"type": "ExecutePipeline",
 				"dependsOn": [
