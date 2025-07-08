@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "strava/activities/processing_data",
+				"folderPath": {
+					"value": "@concat('strava/activities/processing_data')",
+					"type": "Expression"
+				},
 				"fileSystem": "raw"
 			}
 		},
