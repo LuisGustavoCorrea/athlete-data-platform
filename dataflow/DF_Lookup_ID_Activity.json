@@ -31,7 +31,7 @@
 			],
 			"scriptLines": [
 				"source(output(",
-				"          id as string",
+				"          id as long",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
