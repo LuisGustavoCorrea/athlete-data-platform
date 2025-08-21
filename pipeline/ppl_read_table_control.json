@@ -1,0 +1,80 @@
+{
+	"name": "ppl_read_table_control",
+	"properties": {
+		"activities": [
+			{
+				"name": "Read_table_control",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_Lookup_table_control",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "None",
+					"cacheSinks": {
+						"firstRowOnly": true
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Read_table_control",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pipelineReturnValue",
+					"value": [
+						{
+							"key": "start_date_unix_prv",
+							"value": {
+								"type": "Expression",
+								"content": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].start_date_unix)"
+							}
+						},
+						{
+							"key": "full_carga_prv",
+							"value": {
+								"type": "Expression",
+								"content": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].full_carga)"
+							}
+						}
+					],
+					"setSystemVariable": true
+				}
+			}
+		],
+		"variables": {
+			"list_fullcarga": {
+				"type": "String"
+			},
+			"list_incremental": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
