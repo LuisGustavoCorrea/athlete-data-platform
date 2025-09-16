@@ -1,9 +1,14 @@
 # Databricks notebook source
+from databricks.sdk.runtime import *
 from pyspark.sql.functions import current_timestamp
 from pyspark.sql.functions import col
+import pyspark # Call this only after findspark.init()
+from pyspark.context import SparkContext
+from pyspark.sql.session import SparkSession
 
 class BronzeLoader:
     def __init__(self, input_path, checkpoint_path, format_file):
+        self.spark = SparkSession.getActiveSession() or SparkSession.builder.getOrCreate()
         self.input_path = input_path
         self.checkpoint_path = checkpoint_path
         self.format_file = format_file
