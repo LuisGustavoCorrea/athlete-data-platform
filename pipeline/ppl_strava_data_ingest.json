@@ -140,7 +140,10 @@
 					},
 					"waitOnCompletion": true,
 					"parameters": {
-						"param_client_id": "158577",
+						"param_client_id": {
+							"value": "@linkedService().<AKVLinkedServiceName>.properties.secrets.<SecretName>",
+							"type": "Expression"
+						},
 						"param_client_secret": "d5e21b6ebb7636877c654f1d652155ca647389d9",
 						"param_grant_type": "refresh_token",
 						"param_refresh_token": "adb79b50f9580bc5a423192f9df4a6ae25d96035"
