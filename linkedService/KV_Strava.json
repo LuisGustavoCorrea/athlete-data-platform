@@ -1,0 +1,10 @@
+{
+	"name": "KV_Strava",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-athlete-api-info.vault.azure.net/"
+		}
+	}
+}
