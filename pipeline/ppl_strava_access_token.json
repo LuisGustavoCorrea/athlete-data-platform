@@ -7,7 +7,13 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Set_ClientID_KV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set_ClientSecret_KV",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -66,7 +72,7 @@
 				}
 			},
 			{
-				"name": "Web1",
+				"name": "Get_ClientID_KV",
 				"type": "WebActivity",
 				"dependsOn": [],
 				"policy": {
@@ -87,11 +93,11 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set_ClientID_KV",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Web1",
+						"activity": "Get_ClientID_KV",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -103,9 +109,54 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "kv",
+					"variableName": "clientID",
 					"value": {
-						"value": "@activity('Web1').output.value",
+						"value": "@activity('Get_ClientID_KV').output.value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get_ClientSecret_KV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": "https://kv-athlete-api-info.vault.azure.net/secrets/ClientID/bb0a6faad80d4f66b492528cd430ae52?api-version=7.5",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Set_ClientSecret_KV",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get_ClientSecret_KV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "clientSecret",
+					"value": {
+						"value": "@activity('Get_ClientSecret_KV').output.value",
 						"type": "Expression"
 					}
 				}
@@ -129,7 +180,10 @@
 			"access_token": {
 				"type": "String"
 			},
-			"kv": {
+			"clientID": {
+				"type": "String"
+			},
+			"clientSecret": {
 				"type": "String"
 			}
 		},
