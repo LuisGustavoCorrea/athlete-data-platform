@@ -1,20 +1,30 @@
 {
 	"name": "HttpServer1",
 	"properties": {
-		"parameters": {
-			"clientId": {
-				"type": "string"
-			},
-			"clientSecret": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "HttpServer",
 		"typeProperties": {
 			"url": "https://www.strava.com",
 			"enableServerCertificateValidation": true,
-			"authenticationType": "Anonymous"
+			"authenticationType": "Anonymous",
+			"authHeaders": {
+				"Authorization": {
+					"type": "AzureKeyVaultSecret",
+					"store": {
+						"referenceName": "KV_Strava",
+						"type": "LinkedServiceReference"
+					},
+					"secretName": "ClientID"
+				},
+				"APIKey": {
+					"type": "AzureKeyVaultSecret",
+					"store": {
+						"referenceName": "KV_Strava",
+						"type": "LinkedServiceReference"
+					},
+					"secretName": "ClientSecret"
+				}
+			}
 		}
 	}
 }
