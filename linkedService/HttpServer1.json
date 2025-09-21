@@ -3,10 +3,10 @@
 	"properties": {
 		"parameters": {
 			"clientId": {
-				"type": "securestring"
+				"type": "string"
 			},
 			"clientSecret": {
-				"type": "securestring"
+				"type": "string"
 			}
 		},
 		"annotations": [],
