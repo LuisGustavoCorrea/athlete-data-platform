@@ -8,7 +8,7 @@
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous",
 			"authHeaders": {
-				"Authorization": {
+				"X-API-Key": {
 					"type": "AzureKeyVaultSecret",
 					"store": {
 						"referenceName": "KV_Strava",
