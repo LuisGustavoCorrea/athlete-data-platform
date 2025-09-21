@@ -1,5 +1,5 @@
 {
-	"name": "KV_ClientID",
+	"name": "KV_Strava",
 	"properties": {
 		"annotations": [],
 		"type": "AzureKeyVault",

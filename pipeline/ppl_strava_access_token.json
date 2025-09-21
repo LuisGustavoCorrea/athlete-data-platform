@@ -5,7 +5,20 @@
 			{
 				"name": "Refresh_Token",
 				"type": "WebActivity",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Get_ClientID_KV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Get_ClientSecret_KV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -21,7 +34,7 @@
 					},
 					"url": "https://www.strava.com/oauth/token",
 					"body": {
-						"value": "@concat(\n  '{',\n    '\"client_id\":\"', pipeline().parameters.param_client_id, '\",',\n    '\"client_secret\":\"', pipeline().parameters.param_client_secret, '\",',\n    '\"grant_type\":\"', pipeline().parameters.param_grant_type, '\",',\n    '\"refresh_token\":\"', pipeline().parameters.param_refresh_token, '\"',\n  '}'\n)\n",
+						"value": "@concat(\n  '{',\n    '\"client_id\":\"', activity('Get_ClientID_KV').output.value, '\",',\n    '\"client_secret\":\"', activity('Get_ClientSecret_KV').output.value, '\",',\n    '\"grant_type\":\"', pipeline().parameters.param_grant_type, '\",',\n    '\"refresh_token\":\"', pipeline().parameters.param_refresh_token, '\"',\n  '}'\n)",
 						"type": "Expression"
 					}
 				}
@@ -57,17 +70,66 @@
 					],
 					"setSystemVariable": true
 				}
+			},
+			{
+				"name": "Get_ClientID_KV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": true,
+					"secureInput": true
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": {
+						"value": "@pipeline().parameters.param_client_id",
+						"type": "Expression"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Get_ClientSecret_KV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": true,
+					"secureInput": true
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": {
+						"value": "@pipeline().parameters.param_client_secret",
+						"type": "Expression"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
 			}
 		],
 		"parameters": {
 			"param_client_id": {
-				"type": "string"
+				"type": "securestring"
 			},
 			"param_client_secret": {
-				"type": "string"
+				"type": "securestring"
 			},
 			"param_grant_type": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "refresh_token"
 			},
 			"param_refresh_token": {
 				"type": "string"
@@ -75,6 +137,12 @@
 		},
 		"variables": {
 			"access_token": {
+				"type": "String"
+			},
+			"clientID": {
+				"type": "String"
+			},
+			"clientSecret": {
 				"type": "String"
 			}
 		},
