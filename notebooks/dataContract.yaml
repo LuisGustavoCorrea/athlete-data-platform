@@ -1,0 +1,22 @@
+# contracts/strava_activities_dataframe.yaml
+dataContractSpecification: 0.9.3
+id: urn:athlete:strava:activities:staging
+servers:
+  production:
+    type: dataframe   # valida DataFrames (temp views)
+models:
+  strava_activities:
+    type: table
+    fields:
+      id:        { type: long, primary: true }
+      start_date:{ type: timestamp, required: true }
+      distance:  { type: double, minimum: 0 }
+      pace:      { type: double, minimum: 0 }
+      week_day:  { type: integer, minimum: 0, maximum: 6 }
+quality:
+  type: SodaCL
+  specification:
+    checks for strava_activities:
+      - duplicate_count(id) = 0
+      - missing_count(start_date) = 0
+      - invalid_count(week_day) = 0

@@ -5,7 +5,7 @@ from pyspark.sql.functions import (
 )
 from pyspark.sql.functions import round as f_round
 from pyspark.sql import SparkSession
-
+from pyspark.sql.functions import current_timestamp
 
 # --- Colunas atômicas ---------------------------------------------------------
 
@@ -20,6 +20,8 @@ def add_start_date(df: DataFrame,
           .withColumn(out_col, to_date(col(out_col)))
     )
 
+def add_silver_ingestion(df):
+    return df.withColumn('silver_ingestion_timestamp', current_timestamp())
 
 def add_distance_km(df: DataFrame,
                     distance_col: str = "distance",
