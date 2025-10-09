@@ -1,22 +1,63 @@
-# contracts/strava_activities_dataframe.yaml
 dataContractSpecification: 0.9.3
 id: urn:athlete:strava:activities:staging
+info:
+  title: Strava Activities (Staging DF)
+  version: 1.0.0
 servers:
   production:
-    type: dataframe   # valida DataFrames (temp views)
+    type: dataframe
+
 models:
   strava_activities:
     type: table
+    description: Estrutura mínima para teste do DF.
     fields:
-      id:        { type: long, primary: true }
-      start_date:{ type: timestamp, required: true }
-      distance:  { type: double, minimum: 0 }
-      pace:      { type: double, minimum: 0 }
-      week_day:  { type: integer, minimum: 0, maximum: 6 }
+      id:
+        type: long
+        primary: true
+      athlete_id:
+        type: long
+        required: true
+      start_date:
+        type: timestamp
+        required: true
+      sport_type:
+        type: string
+        required: true
+      distance_km:
+        type: double
+      average_speed_kmh:
+        type: double
+      moving_time:
+        type: long
+      elapsed_time:
+        type: long
+      dia_semana:
+        type: string
+
 quality:
   type: SodaCL
   specification:
     checks for strava_activities:
+      - schema:
+          fail:
+            when required column missing:
+              - id
+              - athlete_id
+              - start_date
+              - sport_type
+            when wrong column type:
+              id: BIGINT
+              athlete_id: BIGINT
+              start_date: TIMESTAMP
+              sport_type: STRING
+              distance_km: DOUBLE
+              average_speed_kmh: DOUBLE
+              moving_time: BIGINT
+              elapsed_time: BIGINT
+              dia_semana: STRING
       - duplicate_count(id) = 0
-      - missing_count(start_date) = 0
-      - invalid_count(week_day) = 0
+      - invalid_count(distance_km) = 0:
+          valid min: 0
+      - invalid_count(average_speed_kmh) = 0:
+          valid min: 0
