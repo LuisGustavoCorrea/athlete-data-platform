@@ -110,7 +110,7 @@ def add_pace_min_km_new(df: DataFrame,
     Pace = (moving_time em min) / (distance em km), somente quando distance > 0.
     """
     pace_expr = f_round((col(moving_time_col) / lit(60.0)) / (col(distance_col) / lit(1000.0)), decimals)
-    return df.withColumn(out_col, when(col(distance_col) > 0, pace_expr).otherwise(lit(None)))
+    return df.withColumn(out_col, when(col(distance_col) > 0, pace_expr).otherwise(lit(0)))
 
 
 def add_pace_strava(df: DataFrame,
