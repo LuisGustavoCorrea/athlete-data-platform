@@ -2,6 +2,10 @@
 Data platform with ADF + Databricks + Strava integration
 
 🏃‍♂️ Project Atlhete! — Personal Performance Platform with Strava Data
+## 📊 Architecture Diagram
+You can explore the interactive architecture of the project in the link below:
+
+👉 [Open Architecture Diagram (HTML)](https://luisgustavocorrea.github.io/Architecture-Design/)]
 
 Example of PDF report cover generated with Strava data.
 
