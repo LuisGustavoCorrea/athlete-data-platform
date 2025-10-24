@@ -5,7 +5,7 @@ Data platform with ADF + Databricks + Strava integration
 ## 📊 Architecture Diagram
 You can explore the interactive architecture of the project in the link below:
 
-👉 [Open Architecture Diagram (HTML)](https://luisgustavocorrea.github.io/Architecture-Design/)]
+👉 [Open Architecture Diagram](https://luisgustavocorrea.github.io/Architecture-Design/)
 
 Example of PDF report cover generated with Strava data.
 
