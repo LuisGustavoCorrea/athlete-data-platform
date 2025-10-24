@@ -6,9 +6,18 @@ from pyspark.sql.functions import (
 from pyspark.sql.functions import round as f_round
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import current_timestamp
+from pyspark.sql.window import Window
+from pyspark.sql.functions import row_number, col
+from pyspark.sql import functions as F
 
 # --- Colunas atômicas ---------------------------------------------------------
-
+def dedupe_microbatch(df : DataFrame,BUSINESS_KEYS,ORDER_COLS):
+    w = Window.partitionBy(*[F.col(c) for c in BUSINESS_KEYS]) \
+         .orderBy(*[F.col(c).desc() for c in ORDER_COLS])
+    return (df.withColumn("row_id", F.row_number().over(w))
+              .filter(F.col("row_id")==1)
+              .drop("row_id"))
+    
 def add_start_date(df: DataFrame,
                    src_col: str = "start_date",
                    out_col: str = "start_date") -> DataFrame:
