@@ -10,7 +10,7 @@ from pyspark.sql.window import Window
 from pyspark.sql.functions import row_number, col
 from pyspark.sql import functions as F
 
-# --- Colunas atômicas ---------------------------------------------------------
+
 def dedupe_microbatch(df : DataFrame,BUSINESS_KEYS,ORDER_COLS):
     w = Window.partitionBy(*[F.col(c) for c in BUSINESS_KEYS]) \
          .orderBy(*[F.col(c).desc() for c in ORDER_COLS])
@@ -154,6 +154,65 @@ def add_dia_semana(df: DataFrame,
     Abreviação do dia da semana com date_format (ex.: Mon/Tue...). 'E' segue locale do runtime.
     """
     return df.withColumn(out_col, date_format(col(date_col), pattern))
+
+def assert_quality(df: DataFrame, rules: dict, reject_table: str):
+    # 1) Defina as regras (nome -> condição SQL)
+    #rules = get_rules_activity()
+    
+    # 2) Constrói uma coluna array com TODOS os motivos que baterem
+    #    (evita múltiplos scans/union e duplicaçāo na rejects)
+    #dfq = df.withColumn("reject_reasons", F.array())  # array<string> inicial
+    dfq = df.withColumn("reject_reasons", F.lit(None).cast("array<string>"))
+    
+    for name, sql_cond in rules.items():
+        cond_col = F.expr(sql_cond)
+        dfq = dfq.withColumn(
+            "reject_reasons",
+            F.when(
+                cond_col,
+                # coalesce para lidar com NULL -> vira [] antes de unir com [name]
+                F.array_union(F.coalesce(F.col("reject_reasons"), F.array()), F.array(F.lit(name)))
+            ).otherwise(F.col("reject_reasons"))
+        )
+
+    # 3) Flag, contador e string consolidada (para leitura humana)
+    dfq = (dfq
+           .withColumn("reject_reason_count",
+                       F.when(F.col("reject_reasons").isNull(), F.lit(0))
+                        .otherwise(F.size("reject_reasons")))
+           .withColumn("reject_reason",
+                       F.when(F.col("reject_reasons").isNull(), F.lit(None).cast("string"))
+                        .otherwise(F.array_join("reject_reasons", "|")))
+           .withColumn("reject_timestamp", F.current_timestamp())
+          )
+
+    # 4) Separa válidos x rejeitos (cada registro entra UMA vez na rejects)
+#    df_reject = dfq.filter(F.col("reject_reason_count") > 0 )
+#    df_valid  = dfq.filter(F.col("reject_reason_count") == 0).drop("reject_reasons","reject_reason","reject_reason_count","reject_timestamp")
+    #display(dfq)
+    df_reject = dfq.filter(F.col("reject_reason").isNotNull())
+    #display(df_reject)
+    df_valid  = dfq.filter(F.col("reject_reason").isNull()).drop("reject_reasons","reject_reason","reject_reason_count","reject_timestamp")
+
+    # 5) Persiste rejects (append) — sem duplicação da mesma linha
+    #    Obs: não precisa mergeSchema aqui porque já criamos a tabela com colunas extras.
+    has_rejects = df_reject.limit(1).count() > 0
+
+    if has_rejects:  # evita ação pesada; é um job pequeno
+        (df_reject
+        .write
+        .format("delta")        
+        .mode("append")
+        #.option("checkpointLocation", "/mnt/checkpoints/rejects")
+        .option("mergeSchema", "true")
+        .saveAsTable(reject_table)
+        #.start()
+        )
+        print(f"⚠️ Rejecteds rows saved on {reject_table}")
+    else:
+        print(f"Assert Quality OK")        
+
+    return df_valid
 
 
 
