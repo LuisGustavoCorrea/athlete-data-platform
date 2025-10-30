@@ -2,8 +2,8 @@
 
 def get_rules_activity() -> dict:
     """
-    Regras de qualidade para uc_athlete_data.silver.strava_activities.
-    Retorna { nome_da_regra: expressão_SQL }.
+    Data Quality Rule for uc_athlete_data.silver.strava_activities.
+    Return { Rule_name: expression_SQL }.
     """
     return {
         "rules":{
@@ -27,4 +27,18 @@ def get_rules_activity() -> dict:
         "reject_table": "uc_athlete_data.silver_rejects.strava_activities"
     }
     
-
+def get_rules_subactivity() -> dict:
+    """
+    Data Quality Rule for uc_athlete_data.silver.strava_sub_activity.
+    Return { Rule_name: expression_SQL }.
+    """
+    return {
+        "rules":{
+            # Need To Have
+            "missing_id":             "id IS NULL",
+            "missing_start_date":     "athlete_id IS NULL",
+            "neg_calories":           "calories < 0"
+        },
+        "reject_table": "uc_athlete_data.silver_rejects.strava_sub_activity"
+    }
+    
