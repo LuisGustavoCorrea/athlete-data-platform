@@ -214,7 +214,7 @@ def assert_quality(df: DataFrame, rules: dict, reject_table: str):
 
     return df_valid
 
-def get_silver_ingestion_time_column(self, df):
+def add_silver_ingestion_time(df):
     return (df
             .withColumn("silver_ingestion_timestamp", current_timestamp())
             )
