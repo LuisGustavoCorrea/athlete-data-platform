@@ -20,10 +20,15 @@ class BronzeLoader:
               .load(self.input_path))
         return df if not schema else df.selectExpr(*schema)
 
-    def standardize_columns(self, df):
+    def get_ingestion_time_column(self, df):
+        return (df
+                .withColumn("ingestion_timestamp", current_timestamp())
+               )
+    
+    def get_athlete_id_column(self, df):
         return (df
                 .withColumn("athlete_id", col("athlete.id"))
-                .withColumn("ingestion_timestamp", current_timestamp()))
+               )
 
     def write_to_bronze(self, df, output_path, await_termination=True):
         query = (df.writeStream
