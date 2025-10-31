@@ -34,6 +34,8 @@
 			{
 				"name": "ppl_strava_activities_ingest",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_read_table_control",
@@ -63,6 +65,8 @@
 			{
 				"name": "ppl_strava_sub_activities_ingest",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_strava_activities_ingest",
@@ -98,6 +102,8 @@
 			{
 				"name": "ppl_move_files",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Wait 5 sec",
@@ -150,6 +156,8 @@
 			{
 				"name": "Wait 5 sec",
 				"type": "Wait",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_strava_sub_activities_ingest",
@@ -168,7 +176,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "ppl_strava_access_token",
+						"activity": "ppl_strava_athlete_ingest",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -189,6 +197,8 @@
 			{
 				"name": "ppl_strava_incre_activities_ingest",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_read_table_control",

@@ -1,0 +1,84 @@
+{
+	"name": "athelteJson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Strava_Datalake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "athlete_215212_4d3610dd-e928-4cfd-80f3-dad97f9d31c9.json",
+				"folderPath": "strava/athlete/2025-10-31",
+				"fileSystem": "raw"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"username": {
+					"type": "null"
+				},
+				"resource_state": {
+					"type": "integer"
+				},
+				"firstname": {
+					"type": "string"
+				},
+				"lastname": {
+					"type": "string"
+				},
+				"bio": {
+					"type": "null"
+				},
+				"city": {
+					"type": "string"
+				},
+				"state": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				},
+				"sex": {
+					"type": "string"
+				},
+				"premium": {
+					"type": "boolean"
+				},
+				"summit": {
+					"type": "boolean"
+				},
+				"created_at": {
+					"type": "string"
+				},
+				"updated_at": {
+					"type": "string"
+				},
+				"badge_type_id": {
+					"type": "integer"
+				},
+				"weight": {
+					"type": "number"
+				},
+				"profile_medium": {
+					"type": "string"
+				},
+				"profile": {
+					"type": "string"
+				},
+				"friend": {
+					"type": "null"
+				},
+				"follower": {
+					"type": "null"
+				}
+			}
+		}
+	}
+}

@@ -9,7 +9,14 @@
 						"referenceName": "csv_control",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "tableControl"
+				},
+				{
+					"dataset": {
+						"referenceName": "athelteJson",
+						"type": "DatasetReference"
+					},
+					"name": "ingestJson"
 				}
 			],
 			"sinks": [
@@ -17,7 +24,14 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "selectAthleteIdJson"
+				},
+				{
+					"name": "join1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          athlete_id as integer,",
@@ -29,8 +43,44 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 sink(validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> tableControl",
+				"source(output(",
+				"          id as integer,",
+				"          username as string,",
+				"          resource_state as integer,",
+				"          firstname as string,",
+				"          lastname as string,",
+				"          bio as string,",
+				"          city as string,",
+				"          state as string,",
+				"          country as string,",
+				"          sex as string,",
+				"          premium as boolean,",
+				"          summit as boolean,",
+				"          created_at as string,",
+				"          updated_at as string,",
+				"          badge_type_id as integer,",
+				"          weight as double,",
+				"          profile_medium as string,",
+				"          profile as string,",
+				"          friend as string,",
+				"          follower as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> ingestJson",
+				"ingestJson select(mapColumn(",
+				"          athlete_id_json = id",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectAthleteIdJson",
+				"tableControl, selectAthleteIdJson join(athlete_id == athlete_id_json,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     store: 'cache',",
