@@ -32,30 +32,6 @@
 				}
 			},
 			{
-				"name": "ppl_strava_activities_ingest",
-				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "ppl_strava_activities_ingest",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"p_access_token": {
-							"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
 				"name": "ppl_strava_sub_activities_ingest",
 				"type": "ExecutePipeline",
 				"dependsOn": [
@@ -173,34 +149,6 @@
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "ppl_strava_incre_activities_ingest",
-				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "ppl_strava_incre_activities_ingest",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"p_access_token": {
-							"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
-							"type": "Expression"
-						},
-						"p_start_date_unix": {
-							"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.start_date_unix_prv",
-							"type": "Expression"
-						}
-					}
 				}
 			},
 			{
