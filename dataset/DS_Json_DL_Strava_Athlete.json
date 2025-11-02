@@ -15,7 +15,7 @@
 					"type": "Expression"
 				},
 				"fileSystem": {
-					"value": "@concat('raw/strava/athlete/', formatDateTime(utcNow(), 'yyyy-MM-dd'))\n",
+					"value": "raw/strava/athlete/processing_data/\n",
 					"type": "Expression"
 				}
 			}

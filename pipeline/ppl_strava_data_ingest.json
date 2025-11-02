@@ -5,8 +5,6 @@
 			{
 				"name": "ppl_strava_athlete_ingest",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_strava_access_token",
@@ -129,8 +127,6 @@
 			{
 				"name": "ppl_strava_access_token",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
@@ -224,7 +220,13 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "set Flag Load",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "ppl_move_files_athlete",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -295,7 +297,7 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "set Flag Load",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -317,6 +319,36 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "ppl_move_files_athlete",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ppl_read_table_control",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "ppl_move_files",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"source": "raw/strava/athlete/processing_data/",
+						"destination": {
+							"value": "@concat('raw/strava/athlete/', formatDateTime(utcNow(), 'yyyy-MM-dd'))",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"variables": {
@@ -324,6 +356,9 @@
 				"type": "String"
 			},
 			"flag_load": {
+				"type": "Boolean"
+			},
+			"chevk": {
 				"type": "Boolean"
 			}
 		},
