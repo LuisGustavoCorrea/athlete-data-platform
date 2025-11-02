@@ -30,6 +30,9 @@
 				},
 				{
 					"name": "join1"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -80,7 +83,8 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"join1 sink(validateSchema: false,",
+				"join1 derive(full_carga = coalesce(full_carga,true())) ~> derivedColumn1",
+				"derivedColumn1 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     store: 'cache',",
