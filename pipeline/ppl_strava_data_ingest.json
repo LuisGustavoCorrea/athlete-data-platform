@@ -5,6 +5,8 @@
 			{
 				"name": "ppl_strava_athlete_ingest",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_strava_access_token",
@@ -127,6 +129,8 @@
 			{
 				"name": "ppl_strava_access_token",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
@@ -229,7 +233,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@activity('ppl_read_table_control').output.value.full_carga",
+						"value": "@variables('flag_load')",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
@@ -307,7 +311,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "debug_flag_load",
+					"variableName": "flag_load",
 					"value": {
 						"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.full_carga_prv",
 						"type": "Expression"
@@ -319,7 +323,7 @@
 			"debugAccess_token": {
 				"type": "String"
 			},
-			"debug_flag_load": {
+			"flag_load": {
 				"type": "Boolean"
 			}
 		},
