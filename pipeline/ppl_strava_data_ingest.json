@@ -58,17 +58,9 @@
 			{
 				"name": "ppl_strava_sub_activities_ingest",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "ppl_strava_activities_ingest",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "ppl_strava_incre_activities_ingest",
+						"activity": "If Condition1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -95,8 +87,6 @@
 			{
 				"name": "ppl_move_files",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Wait 5 sec",
@@ -149,8 +139,6 @@
 			{
 				"name": "Wait 5 sec",
 				"type": "Wait",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_strava_sub_activities_ingest",
@@ -242,8 +230,6 @@
 						{
 							"name": "Incremental_Load",
 							"type": "ExecutePipeline",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [],
 							"policy": {
 								"secureInput": false
@@ -272,8 +258,6 @@
 						{
 							"name": "Full_Load",
 							"type": "ExecutePipeline",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [],
 							"policy": {
 								"secureInput": false
