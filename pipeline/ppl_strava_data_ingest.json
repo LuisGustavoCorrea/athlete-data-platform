@@ -36,14 +36,7 @@
 				"type": "ExecutePipeline",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [
-					{
-						"activity": "ppl_read_table_control",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"secureInput": false
 				},
@@ -199,14 +192,7 @@
 				"type": "ExecutePipeline",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [
-					{
-						"activity": "ppl_read_table_control",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"secureInput": false
 				},
@@ -228,11 +214,73 @@
 						}
 					}
 				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('ppl_read_table_control').output.value.full_carga",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Incremental_Load",
+							"type": "ExecutePipeline",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "ppl_strava_incre_activities_ingest",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"p_access_token": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
+									"p_start_date_unix": "@activity('ppl_read_table_control').output.pipelineReturnValue.start_date_unix_prv"
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Full_Load",
+							"type": "ExecutePipeline",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "ppl_strava_activities_ingest",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"p_access_token": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token"
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"variables": {
 			"debugAccess_token": {
 				"type": "String"
+			},
+			"debug_flag_load": {
+				"type": "Boolean"
 			}
 		},
 		"annotations": [],
