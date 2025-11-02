@@ -273,6 +273,30 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ppl_read_table_control",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "debug_flag_load",
+					"value": {
+						"value": "@activity('ppl_read_table_control').output.value.full_carga_prv",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
