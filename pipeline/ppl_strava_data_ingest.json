@@ -218,7 +218,14 @@
 			{
 				"name": "If Condition1",
 				"type": "IfCondition",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
@@ -243,8 +250,14 @@
 								},
 								"waitOnCompletion": true,
 								"parameters": {
-									"p_access_token": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
-									"p_start_date_unix": "@activity('ppl_read_table_control').output.pipelineReturnValue.start_date_unix_prv"
+									"p_access_token": {
+										"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
+										"type": "Expression"
+									},
+									"p_start_date_unix": {
+										"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.start_date_unix_prv",
+										"type": "Expression"
+									}
 								}
 							}
 						}
@@ -267,7 +280,10 @@
 								},
 								"waitOnCompletion": true,
 								"parameters": {
-									"p_access_token": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token"
+									"p_access_token": {
+										"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
+										"type": "Expression"
+									}
 								}
 							}
 						}
@@ -293,7 +309,7 @@
 				"typeProperties": {
 					"variableName": "debug_flag_load",
 					"value": {
-						"value": "@activity('ppl_read_table_control').output.value.full_carga_prv",
+						"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.full_carga_prv",
 						"type": "Expression"
 					}
 				}
