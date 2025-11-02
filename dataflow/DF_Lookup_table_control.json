@@ -30,6 +30,9 @@
 				},
 				{
 					"name": "join1"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -75,12 +78,13 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectAthleteIdJson",
-				"tableControl, selectAthleteIdJson join(athlete_id == athlete_id_json,",
-				"     joinType:'inner',",
+				"selectAthleteIdJson, tableControl join(athlete_id_json == athlete_id,",
+				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"join1 sink(validateSchema: false,",
+				"join1 derive(full_carga = coalesce(full_carga,true())) ~> derivedColumn1",
+				"derivedColumn1 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     store: 'cache',",

@@ -14,10 +14,8 @@
 					"value": "@concat('athlete_', formatDateTime(utcNow(), 'HHmmss'), '_', guid(), '.json')",
 					"type": "Expression"
 				},
-				"fileSystem": {
-					"value": "@concat('raw/strava/athlete/', formatDateTime(utcNow(), 'yyyy-MM-dd'))\n",
-					"type": "Expression"
-				}
+				"folderPath": "strava/athlete/processing_data",
+				"fileSystem": "raw"
 			}
 		},
 		"schema": {}

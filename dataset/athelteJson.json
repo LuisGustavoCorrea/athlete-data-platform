@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "athlete_215212_4d3610dd-e928-4cfd-80f3-dad97f9d31c9.json",
-				"folderPath": "strava/athlete/2025-10-31",
+				"folderPath": "strava/athlete/processing_data",
 				"fileSystem": "raw"
 			}
 		},

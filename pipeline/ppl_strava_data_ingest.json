@@ -32,50 +32,11 @@
 				}
 			},
 			{
-				"name": "ppl_strava_activities_ingest",
-				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [
-					{
-						"activity": "ppl_read_table_control",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "ppl_strava_activities_ingest",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"p_access_token": {
-							"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
 				"name": "ppl_strava_sub_activities_ingest",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "ppl_strava_activities_ingest",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "ppl_strava_incre_activities_ingest",
+						"activity": "If Condition1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -102,8 +63,6 @@
 			{
 				"name": "ppl_move_files",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Wait 5 sec",
@@ -156,8 +115,6 @@
 			{
 				"name": "Wait 5 sec",
 				"type": "Wait",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_strava_sub_activities_ingest",
@@ -195,10 +152,109 @@
 				}
 			},
 			{
-				"name": "ppl_strava_incre_activities_ingest",
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "set Flag Load",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "ppl_move_files_athlete",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@variables('flag_load')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Incremental_Load",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "ppl_strava_incre_activities_ingest",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"p_access_token": {
+										"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
+										"type": "Expression"
+									},
+									"p_start_date_unix": {
+										"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.start_date_unix_prv",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Full_Load",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "ppl_strava_activities_ingest",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"p_access_token": {
+										"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "set Flag Load",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ppl_read_table_control",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "flag_load",
+					"value": {
+						"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.full_carga_prv",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ppl_move_files_athlete",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "ppl_read_table_control",
@@ -213,17 +269,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "ppl_strava_incre_activities_ingest",
+						"referenceName": "ppl_move_files",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
 					"parameters": {
-						"p_access_token": {
-							"value": "@activity('ppl_strava_access_token').output.pipelineReturnValue.access_token_prv.access_token",
-							"type": "Expression"
-						},
-						"p_start_date_unix": {
-							"value": "@activity('ppl_read_table_control').output.pipelineReturnValue.start_date_unix_prv",
+						"source": "raw/strava/athlete/processing_data/",
+						"destination": {
+							"value": "@concat('raw/strava/athlete/', formatDateTime(utcNow(), 'yyyy-MM-dd'))",
 							"type": "Expression"
 						}
 					}
@@ -233,6 +286,12 @@
 		"variables": {
 			"debugAccess_token": {
 				"type": "String"
+			},
+			"flag_load": {
+				"type": "Boolean"
+			},
+			"chevk": {
+				"type": "Boolean"
 			}
 		},
 		"annotations": [],

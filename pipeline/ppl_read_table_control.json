@@ -59,7 +59,7 @@
 							"key": "full_carga_prv",
 							"value": {
 								"type": "Expression",
-								"content": "@string(activity('Read_table_control').output.runStatus.output.sink1.value[0].full_carga)"
+								"content": "@activity('Read_table_control').output.runStatus.output.sink1.value[0].full_carga"
 							}
 						}
 					],
