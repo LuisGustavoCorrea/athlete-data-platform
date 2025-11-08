@@ -9,7 +9,31 @@ from pyspark.sql.functions import current_timestamp
 from pyspark.sql.window import Window
 from pyspark.sql.functions import row_number, col
 from pyspark.sql import functions as F
+from typing import List
 
+def upsert_data(
+    microBatchDF,
+    batch_id: int,
+    target_table: str,
+    key_columns: List[str],
+    temp_view_name: str
+):
+    # Cria / recria a temp view
+    microBatchDF.createOrReplaceTempView(temp_view_name)
+    
+    # Monta o ON dinamicamente a partir das chaves
+    on_clause = " AND ".join([f"A.{col} = B.{col}" for col in key_columns])
+    
+    # Se quiser manter o INSERT * igual estava:
+    sql_query = f"""
+        MERGE INTO {target_table} A
+        USING {temp_view_name} B
+        ON {on_clause}
+        WHEN NOT MATCHED THEN
+          INSERT *
+    """
+    
+    microBatchDF.sparkSession.sql(sql_query)
 
 def dedupe_microbatch(df : DataFrame,BUSINESS_KEYS,ORDER_COLS):
     w = Window.partitionBy(*[F.col(c) for c in BUSINESS_KEYS]) \
