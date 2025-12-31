@@ -1,0 +1,40 @@
+resources:
+  jobs:
+    athlete_pipeline:
+      name: strava-pipeline
+      run_as:
+        user_name: lgcpazdb892@outlook.com
+      
+      job_clusters:
+        - job_cluster_key: athlete_job_cluster
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 1
+            # Se quiser autoscaling (recomendado), troque o bloco acima por:
+            # autoscale:
+            #   min_workers: 1
+            #   max_workers: 3
+
+            # Opcional (recomendado): runtime mais estável e logs melhores
+            spark_conf:
+              "spark.databricks.delta.formatCheck.enabled": "false"
+
+      tasks:
+        - task_key: bronze_load_activities
+          job_cluster_key: athlete_job_cluster
+          notebook_task:
+            notebook_path: ../src/notebooks/01_bronze_load.ipynb
+            base_parameters:
+              1_input_path: "abfss://raw@adlsathlete.dfs.core.windows.net/strava/activities/"
+              2_output_path: "abfss://bronze@adlsathlete.dfs.core.windows.net/strava/activities/"
+              3_format_file: "json"
+              4_checkpoint_path: "abfss://bronze@adlsathlete.dfs.core.windows.net/strava/activities/checkpoints/"
+
+        # Próxima etapa (exemplo) — você adiciona o notebook depois:
+        # - task_key: bronze_sanity_checks
+        #   depends_on:
+        #     - task_key: bronze_load
+        #   job_cluster_key: athlete_job_cluster
+        #   notebook_task:
+        #     notebook_path: ${workspace.root_path}/files/src/notebooks/02_bronze_checks.ipynb
