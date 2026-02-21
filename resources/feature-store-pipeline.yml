@@ -1,0 +1,43 @@
+resources:
+  jobs:
+    feature-store-pipeline:
+      name: "[${bundle.target}] Feature Store Pipeline"
+
+      tasks:
+        - task_key: compute_activity_features
+          notebook_task:
+            notebook_path: ../src/notebooks/Feature_Activity.py
+          libraries:
+            - whl: ../dist/*.whl
+          job_cluster_key: feature_cluster
+
+        - task_key: compute_rolling_features
+          depends_on:
+            - task_key: compute_activity_features
+          notebook_task:
+            notebook_path: ../src/notebooks/Feature_Rolling.py
+          libraries:
+            - whl: ../dist/*.whl
+          job_cluster_key: feature_cluster
+
+      job_clusters:
+        - job_cluster_key: feature_cluster
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 1
+            spark_conf:
+              "spark.databricks.delta.preview.enabled": "true"
+
+      schedule:
+        quartz_cron_expression: "0 0 6 * * ?"
+        timezone_id: "America/Sao_Paulo"
+        pause_status: "${var.pause_status}"
+
+      email_notifications:
+        on_failure:
+          - ${var.notification_email}
+
+      tags:
+        project: "athlete-data-platform"
+        layer: "feature-store"

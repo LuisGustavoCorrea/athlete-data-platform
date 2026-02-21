@@ -6,6 +6,9 @@ resources:
         user_name: lgcpazdb892@outlook.com
 
       tasks:
+        # -----------------------
+        # BRONZE - ACTIVITIES
+        # -----------------------
         - task_key: bronze_load_activities
           job_cluster_key: athlete_job_cluster
           notebook_task:
@@ -15,14 +18,46 @@ resources:
               2_output_path: "abfss://bronze@adlsathlete.dfs.core.windows.net/strava/activities/"
               3_format_file: "json"
               4_checkpoint_path: "abfss://bronze@adlsathlete.dfs.core.windows.net/strava/activities/checkpoints/"
+        - task_key: Silver_Activities 
+          depends_on:
+            - task_key: bronze_load_activities
+          job_cluster_key: athlete_job_cluster
+          notebook_task:
+            notebook_path: ../src/notebooks/Silver_activities.py
+            
+        # -----------------------
+        # BRONZE - ATHLETE
+        # -----------------------
+        - task_key: bronze_load_athlete
+          job_cluster_key: athlete_job_cluster
+          notebook_task:
+            notebook_path: ../src/notebooks/01_bronze_load.py
+            base_parameters:
+              1_input_path: abfss://raw@adlsathlete.dfs.core.windows.net/strava/athlete/
+              2_output_path: abfss://bronze@adlsathlete.dfs.core.windows.net/strava/athlete/
+              3_format_file: json
+              4_checkpoint_path: abfss://bronze@adlsathlete.dfs.core.windows.net/strava/athlete/checkpoints/
 
-        # Próxima etapa (exemplo) — você adiciona o notebook depois:
-        # - task_key: bronze_sanity_checks
-        #   depends_on:
-        #     - task_key: bronze_load
-        #   job_cluster_key: athlete_job_cluster
-        #   notebook_task:
-        #     notebook_path: ${workspace.root_path}/files/src/notebooks/02_bronze_checks.ipynb
+        # -----------------------
+        # BRONZE + SILVER - SUB ACTIVITY
+        # -----------------------
+        - task_key: bronze_load_SubActivity  
+          job_cluster_key: athlete_job_cluster
+          notebook_task:
+            notebook_path: ../src/notebooks/01_bronze_load.py
+            base_parameters:
+              1_input_path: abfss://raw@adlsathlete.dfs.core.windows.net/strava/sub_activity/
+              2_output_path: abfss://bronze@adlsathlete.dfs.core.windows.net/strava/sub_activity/
+              3_format_file: json
+              4_checkpoint_path: abfss://bronze@adlsathlete.dfs.core.windows.net/strava/sub_activity/checkpoints/
+        
+        - task_key: Silver_SubActivity 
+          depends_on:
+            - task_key: bronze_load_SubActivity
+          job_cluster_key: athlete_job_cluster
+          notebook_task:
+            notebook_path: ../src/notebooks/Silver_SubActivity.py            
+      
       job_clusters:
         - job_cluster_key: athlete_job_cluster
           new_cluster:

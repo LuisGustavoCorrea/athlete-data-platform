@@ -11,6 +11,8 @@ include:
 sync:
   include:
     - src/notebooks/**
+    - src/feature_engineering/**
+    - src/ml/**
 
 artifacts:
   python_artifact:
@@ -23,6 +25,10 @@ variables:
     description: The catalog to use
   schema:
     description: The schema to use
+  pause_status:
+    description: Whether to pause scheduled jobs (PAUSED or UNPAUSED)
+  notification_email:
+    description: Email for job failure notifications
 
 targets:
   dev:
@@ -38,6 +44,8 @@ targets:
     variables:
       catalog: dbw_athlete
       schema: dev
+      pause_status: PAUSED
+      notification_email: luisgcorrea94@gmail.com
     presets:
       artifacts_dynamic_version: true
   prod:
@@ -49,6 +57,8 @@ targets:
     variables:
       catalog: dbw_athlete
       schema: prod
+      pause_status: UNPAUSED
+      notification_email: luisgcorrea94@gmail.com
     permissions:
       - user_name: lgcpazdb892@outlook.com
         level: CAN_MANAGE

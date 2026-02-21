@@ -1,0 +1,53 @@
+resources:
+  jobs:
+    ml-training-pipeline:
+      name: "[${bundle.target}] ML Training Pipeline"
+
+      tasks:
+        - task_key: train_time_estimator
+          notebook_task:
+            notebook_path: ../src/notebooks/Train_Time_Estimator.py
+          libraries:
+            - whl: ../dist/*.whl
+          job_cluster_key: ml_cluster
+
+      job_clusters:
+        - job_cluster_key: ml_cluster
+          new_cluster:
+            spark_version: "15.4.x-ml-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 1
+            spark_conf:
+              "spark.databricks.delta.preview.enabled": "true"
+
+      # Manual trigger - not scheduled
+      tags:
+        project: "athlete-data-platform"
+        layer: "ml-training"
+
+    ml-inference-pipeline:
+      name: "[${bundle.target}] ML Batch Inference"
+
+      tasks:
+        - task_key: batch_inference
+          notebook_task:
+            notebook_path: ../src/notebooks/Batch_Inference.py
+          libraries:
+            - whl: ../dist/*.whl
+          job_cluster_key: inference_cluster
+
+      job_clusters:
+        - job_cluster_key: inference_cluster
+          new_cluster:
+            spark_version: "15.4.x-ml-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 1
+
+      schedule:
+        quartz_cron_expression: "0 30 6 * * ?"
+        timezone_id: "America/Sao_Paulo"
+        pause_status: "${var.pause_status}"
+
+      tags:
+        project: "athlete-data-platform"
+        layer: "ml-inference"
